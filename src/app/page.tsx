@@ -22,11 +22,11 @@ export default function Home() {
         <p className="text-white text-lg">A simple authentication service</p>
 
         <div>
-          {/* <LoginButton mode="modal" asChild>
-            <Button variant="secondary" size="lg">
-              Sign in
-            </Button>
-          </LoginButton> */}
+          {/* <Button
+            onClick={() => {
+              temp();
+            }}
+          >click me</Button> */}
         </div>
       </div>
     </main>

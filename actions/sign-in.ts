@@ -1,7 +1,7 @@
 "use server";
 
 import * as z from "zod";
-import  AuthError  from "next-auth";
+import { AuthError } from "next-auth";
 import bcrypt from "bcryptjs";
 
 import { signIn } from "@/auth";
@@ -17,6 +17,7 @@ import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import TwoFactorConfirmation from "@/models/TwoFactorConfirmation";
 import { getTwoFactorConfirmationByUserId } from "@/data/two-factor-confirmation";
 import dbConnect from "@/lib/dbConnect";
+import { redirect } from 'next/navigation'
 export const login = async (
   values: z.infer<typeof LoginSchema>,
   callbackUrl?: string | null
@@ -103,18 +104,16 @@ export const login = async (
     await signIn("credentials", {
       email,
       password,
-      callbackUrl: DEFAULT_LOGIN_REDIRECT,
+      redirectTo: "/settings",
     });
-
-    // return { success: "Login Sucess!" };
-  } catch (error) {
-    if (error instanceof AuthError) {
-      return { error: "Invalid credentials!" };
-    } else {
-      console.error(error);
-      return { error: "Something went wrong!" };
+  } catch(e){
+        
+    if(e instanceof AuthError){
+        switch((e.type) ){
+            case "CredentialsSignin": return {error: "Invalid credentials"};
+            default: return {success: "something went wrong"};
+        }
     }
-
-    throw error;
-  }
-};
+    throw e;
+}
+}

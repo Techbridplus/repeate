@@ -29,7 +29,7 @@ export const {
   signOut,
 } = NextAuth({
   pages: {
-    signIn: "/auth/login",
+    signIn: "/auth/sign-in",
     error: "/auth/error",
   },
   // events: {
@@ -107,13 +107,13 @@ export const {
       return token;
     },
   },
-  adapter: MongoDBAdapter(async () => {
-    if (!process.env.MONGODB_URI) {
-      throw new Error("MONGODB_URI is not defined");
-    }
-    const client = await MongoClient.connect(process.env.MONGODB_URI);
-    return client;
-  }),
+  // adapter: MongoDBAdapter(async () => {
+  //   if (!process.env.MONGODB_URI) {
+  //     throw new Error("MONGODB_URI is not defined");
+  //   }
+  //   const client = await MongoClient.connect(process.env.MONGODB_URI);
+  //   return client;
+  // }),
   session: { strategy: "jwt" },
   ...authConfig,
 });
