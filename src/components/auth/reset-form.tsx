@@ -29,7 +29,7 @@ const ResetForm = () => {
   const [isPending, startTransition] = useTransition();
 
   const form = useForm<z.infer<typeof ResetSchema>>({
-    resolver: zodResolver(ResetSchema),
+    // resolver: zodResolver(ResetSchema),
     defaultValues: {
       email: "",
     },
@@ -52,7 +52,7 @@ const ResetForm = () => {
     <CardWrapper
       headerLabel="Forgot your password?"
       backButtonLabel="Back to login"
-      backButtonHref="/auth/login"
+      backButtonHref="/auth/sign-in"
     >
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">

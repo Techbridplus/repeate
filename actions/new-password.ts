@@ -45,14 +45,12 @@ export const newPassword = async (
 
   const hashedPassword = await bcrypt.hash(password, 10);
 
-  await User.updateOne({
-    where: { id: existingUser.id },
-    data: { password: hashedPassword },
-  });
+  await User.updateOne(
+    { _id: existingUser._id },
+    { password: hashedPassword }
+  );
 
-  await PasswordResetToken.deleteOne({
-    where: { id: existingToken.id },
-  });
+  await PasswordResetToken.deleteOne({ _id: existingToken._id });
 
   return { success: "Password updated!" };
 };

@@ -1,7 +1,10 @@
 import ResetForm from "@/components/auth/reset-form";
 
 const ResetPage = () => {
-  return <ResetForm />;
+  return <div className="min-h-screen flex items-center justify-center">
+    <ResetForm  />
+  </div>
+  
 };
 
 export default ResetPage;

@@ -33,7 +33,7 @@ const NewPasswordForm = () => {
   const token = searchParams.get("token");
 
   const form = useForm<z.infer<typeof NewPasswordSchema>>({
-    resolver: zodResolver(NewPasswordSchema),
+    // resolver: zodResolver(NewPasswordSchema),
     defaultValues: {
       password: "",
     },
@@ -56,7 +56,7 @@ const NewPasswordForm = () => {
     <CardWrapper
       headerLabel="Enter a new password"
       backButtonLabel="Back to login"
-      backButtonHref="/auth/login"
+      backButtonHref="/auth/sign-in"
     >
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">

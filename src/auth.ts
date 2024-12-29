@@ -32,15 +32,15 @@ export const {
     signIn: "/auth/sign-in",
     error: "/auth/error",
   },
-  // events: {
-  //   async linkAccount({ user }) {
-  //     console.log("linkAccount");
-  //     await User.updateMany(
-  //       { id: user.id },
-  //       { $set: { emailVerified: new Date() } }
-  //     );
-  //   },
-  // },
+  events: {
+    async linkAccount({ user }) {
+      console.log("linkAccount");
+      await User.updateMany(
+        { id: user.id },
+        { $set: { emailVerified: new Date() } }
+      );
+    },
+  },
 
   callbacks: {
     async signIn({ user, account }) {

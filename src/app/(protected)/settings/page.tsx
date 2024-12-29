@@ -42,6 +42,7 @@ const SettingsPage = () => {
   const { update } = useSession();
 
 const user = useCurrentUser();
+console.log("user", user);
 const form = useForm<z.infer<typeof SettingsSchema>>({
 
   defaultValues: {
@@ -218,6 +219,7 @@ const form = useForm<z.infer<typeof SettingsSchema>>({
         </Form>
       </CardContent>
     </Card>
+  
   );
 };
 

@@ -2,9 +2,7 @@ import PasswordResetToken from "@/models/PasswordResetToken";
 
 export const getPasswordResetTokenByToken = async (token: string) => {
   try {
-    const passwordResetToken = await PasswordResetToken.findOne({
-      where: { token },
-    });
+    const passwordResetToken = await PasswordResetToken.findOne({ token });
 
     return passwordResetToken;
   } catch (error) {
@@ -15,7 +13,7 @@ export const getPasswordResetTokenByToken = async (token: string) => {
 export const getPasswordResetTokenByEmail = async (email: string) => {
   try {
     const passwordResetToken = await PasswordResetToken.findOne({
-      where: { email },
+      email,
     });
 
     return passwordResetToken;

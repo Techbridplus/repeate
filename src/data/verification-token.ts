@@ -3,9 +3,7 @@ import dbConnect from "@/lib/dbConnect";
 export const getVerificationTokenByEmail = async (email: string) => {
   try {
     await dbConnect();
-    const verificationToken = await VerificationToken.findOne({
-      where: { email },
-    });
+    const verificationToken = await VerificationToken.findOne({ email });
 
     return verificationToken;
   } catch (error) {

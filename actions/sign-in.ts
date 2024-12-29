@@ -31,7 +31,7 @@ export const login = async (
   const { email, password, code } = validatedFields.data;
 
   const existingUser = await getUserByEmail(email);
-
+  console.log("existingUser", existingUser);
   if (!existingUser || !existingUser.email || !existingUser.password) {
     return { error: "Email does not exist!" };
   }
@@ -40,11 +40,16 @@ export const login = async (
     const verificationToken = await generateVerificationToken(
       existingUser.email
     );
-
-    await sendVerificationEmail(
-      verificationToken.email,
-      verificationToken.token
-    );
+    console.log("verificationToken", verificationToken);
+    try{
+        await sendVerificationEmail(
+        verificationToken.email,
+        verificationToken.token
+      );
+    }catch(e){
+        console.log("error sending email", e);
+    }
+    
 
     return { success: "Confirmation email Sent!" };
   }
@@ -55,7 +60,7 @@ export const login = async (
     return { error: "Invalid Credentials!" };
   }
 
-  if (existingUser.isTwoFactorEnabled && existingUser.email) {
+  if (!existingUser.isTwoFactorEnabled && existingUser.email) {
     if (code) {
       const twoFactorToken = await getTwoFactorTokenByEmail(existingUser.email);
 
@@ -73,27 +78,46 @@ export const login = async (
         return { error: "Code expired!" };
       }
 
-      await TwoFactorConfirmation.deleteOne({
+      try{
+        await TwoFactorConfirmation.deleteOne({
         _id: twoFactorToken._id,
       });
-
-      const existingConfirmation = await getTwoFactorConfirmationByUserId(
-        existingUser.id
-      );
-
-      if (existingConfirmation) {
-        await TwoFactorConfirmation.deleteOne({
-          _id: existingConfirmation._id,
-        });
+      }catch(e){
+          console.log("error deleting two factor token", e);
       }
+      
+      try{
+          const existingConfirmation = await getTwoFactorConfirmationByUserId(
+          existingUser._id,
+        );
 
-      await TwoFactorConfirmation.create({
-          userId: existingUser.id,
-      });
+        if (existingConfirmation) {
+          await TwoFactorConfirmation.deleteOne({
+            _id: existingConfirmation._id,
+          });
+        }
+      }catch(e){
+          console.log("error deleting two factor confirmation", e);
+      }
+      
+      try{
+          await TwoFactorConfirmation.create({
+            userId: existingUser._id,
+            user: existingUser._id,
+        });
+      }catch(e){
+          console.log("error creating two factor confirmation", e);
+      }
+      
 
     } else {
-      const twoFactorToken = await generateTwoFactorToken(existingUser.email);
-      await sendTwoFactorTokenEmail(twoFactorToken.email, twoFactorToken.token);
+      try{
+          const twoFactorToken = await generateTwoFactorToken(existingUser.email);
+          await sendTwoFactorTokenEmail(twoFactorToken.email, twoFactorToken.token);
+      }catch(e){
+          console.log("error sending two factor token", e);
+      }
+      
 
       return { twoFactor: true };
     }
